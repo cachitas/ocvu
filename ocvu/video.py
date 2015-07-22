@@ -9,6 +9,9 @@ import logging
 import cv2
 
 
+logger = logging.getLogger(__name__)
+
+
 class Video:
 
     """
@@ -99,7 +102,7 @@ class Video:
         else:
             number = self.frame_number
 
-        logging.info('Reading frame %d' % number)
+        logger.debug('Reading frame %d' % number)
 
         reading_success, image = self._capture.read()
 
