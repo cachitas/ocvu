@@ -133,13 +133,15 @@ class Video:
         frame = self.read_frame(number)
 
         if resize:
-            frame = cv2.resize(frame,
+            image = cv2.resize(frame.image,
                                dsize=(0, 0),
                                fx=0.5,
                                fy=0.5,
                                interpolation=cv2.INTER_AREA)
+        else:
+            image = frame.image
 
-        cv2.imshow(window, frame)
+        cv2.imshow(window, image)
         cv2.waitKey(0)
         cv2.destroyAllWindows()
 
@@ -157,7 +159,7 @@ class Video:
 
         for i in self.frames[begin:end:step]:
             frame = self.read_frame(i)
-            cv2.putText(frame,
+            cv2.putText(frame.image,
                         "Frame " + str(i),
                         (10, 30),
                         cv2.FONT_HERSHEY_SIMPLEX,
@@ -165,7 +167,7 @@ class Video:
                         (255, 0, 0),
                         1,
                         cv2.LINE_AA)
-            cv2.imshow(window, frame)
+            cv2.imshow(window, frame.image)
             key = cv2.waitKey(wait_time) & 0xff
             if key == 27:
                 break
