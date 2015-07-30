@@ -153,7 +153,7 @@ class Video:
         if end is None:
             end = self.nframes
         if window is None:
-            window = 'Playing {}'.format(self.file)
+            window = 'Playing Video'
         if wait_time is None:
             wait_time = int(1000 / self.fps)
 
