@@ -122,3 +122,21 @@ class Contour(object):
         thickness = kwargs.pop('thickness', -1)
         center = tuple(map(int, self.centroid))
         cv2.circle(image, center, radius, color, thickness, **kwargs)
+
+
+def find_biggest_contours(image, n=1, area_min=None, **kwargs):
+    """Returns the `n` biggest contours in `image`.
+    Returns a list of contours sorted by area in descending order.
+    If you provide a minimal area value, contours returned will be
+    filtered like so.
+    """
+    mode = kwargs.pop('mode', cv2.RETR_EXTERNAL)
+    method = kwargs.pop('method', cv2.CHAIN_APPROX_SIMPLE)
+    _, contours, _ = cv2.findContours(image, mode, method, **kwargs)
+    contours = map(Contour, contours)
+    if area_min is not None:
+        contours = [cnt for cnt in contours if cnt.area > area_min]
+    else:
+        contours = list(contours)
+    contours.sort(key=lambda cnt: cnt.area, reverse=True)
+    return contours
