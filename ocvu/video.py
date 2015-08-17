@@ -21,7 +21,7 @@ class Video:
     def __init__(self, filepath, grayscale=False):
         # OpenCV VideoCapture object
         self._capture = cv2.VideoCapture(filepath)
-        self._grayscale = grayscale
+        self.grayscale = grayscale
 
     def __iter__(self):
         for i in self.frames:
@@ -107,12 +107,8 @@ class Video:
         reading_success, image = self._capture.read()
 
         if reading_success is True:
-            if grayscale is None:
-                if self._grayscale is True:
-                    image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-            else:
-                if grayscale is True:
-                    image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+            if grayscale or self.grayscale:
+                image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
             return Frame(number, image)
         else:
             raise Exception("Failed to read frame.")
