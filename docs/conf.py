@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 # ocvu documentation build configuration file, created by
-# sphinx-quickstart on Wed Aug 19 18:31:55 2015.
+# sphinx-quickstart on Thu Aug 20 10:45:51 2015.
 #
 # This file is execfile()d with the current directory set to its
 # containing dir.
@@ -32,8 +32,6 @@ import shlex
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
-    'sphinx.ext.todo',
-    'sphinx.ext.coverage',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -106,7 +104,7 @@ pygments_style = 'sphinx'
 #keep_warnings = False
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
-todo_include_todos = True
+todo_include_todos = False
 
 
 # -- Options for HTML output ----------------------------------------------
