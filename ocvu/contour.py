@@ -61,8 +61,9 @@ class Contour(object):
     def ellipse(self):
         """Fits an ellipse and returns the rotated rectangle in which
         the ellipse is inscribed.
+
         The returned value is the tuple:
-            ((x, y), (major_axis, minor_axis), angle)
+        ``((x, y), (major_axis, minor_axis), angle)``
         """
         return cv2.fitEllipse(self.contour)
 
@@ -73,7 +74,7 @@ class Contour(object):
 
     def draw(self, image, **kwargs):
         """Draw contour.
-        `kwargs` are passed to `cv2.rectangle` method.
+        ``kwargs`` are passed to ``cv2.rectangle`` method.
         Default color is green.
         """
         color = kwargs.pop('color', (0, 255, 0))
