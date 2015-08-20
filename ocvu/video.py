@@ -84,16 +84,14 @@ class Video:
         """Returns an iterator with all frames."""
         return range(self.nframes)
 
-    def read_frame(self, number=None, grayscale=None):
+    def read_frame(self, number=None, grayscale=False):
         """Reads the current frame and returns it.
         You can also ask for a specific frame.
         Returns a Frame object.
 
-        Parameters:
-        ===========
-        :number: Number of the frame desired. If None, reads the current
-                 one. Default is None.
-        :grayscale: Convert the frame read to grayscale. Default is False.
+        :param int number: Number of the frame desired. If None, reads
+                           the current one.
+        :param bool grayscale: Convert the frame read to grayscale.
         """
         assert(self._capture.isOpened())
 
