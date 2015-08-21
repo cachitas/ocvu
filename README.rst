@@ -11,6 +11,4 @@ ocvu
 
 OpenCV Utilities
 
-Documentation: https://ocvu.readthedocs.org/
-
-License: MIT
+Check the documentation `here <https://ocvu.readthedocs.org/>`.
