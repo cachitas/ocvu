@@ -1,14 +1,27 @@
-# Always prefer setuptools over distutils
-from setuptools import setup, find_packages
-# To use a consistent encoding
-from codecs import open
-from os import path
+#!/usr/bin/env python
+# -*- encoding: utf-8 -*-
+from __future__ import absolute_import, print_function
 
-here = path.abspath(path.dirname(__file__))
+import io
+# import os
+import re
+# from glob import glob
+# from os.path import basename
+from os.path import dirname
+from os.path import join
+# from os.path import relpath
+# from os.path import splitext
 
-# Get the long description from the relevant file
-with open(path.join(here, 'DESCRIPTION.rst'), encoding='utf-8') as f:
-    long_description = f.read()
+from setuptools import find_packages
+from setuptools import setup
+
+
+def read(*names, **kwargs):
+    return io.open(
+        join(dirname(__file__), *names),
+        encoding=kwargs.get('encoding', 'utf8')
+    ).read()
+
 
 setup(
     name='ocvu',
@@ -19,10 +32,12 @@ setup(
     version='0.1.0',
 
     description='OpenCV Utilities',
-    long_description=long_description,
+    long_description='%s\n%s' % (read('README.rst'),
+                                 re.sub(':[a-z]+:`~?(.*?)`',
+                                    r'``\1``', read('CHANGELOG.rst'))),
 
     # The project's main homepage.
-    url='',
+    url='https://github.com/cachitas/ocvu',
 
     # Author details
     author='Hugo Cachitas',
