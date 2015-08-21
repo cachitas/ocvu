@@ -9,6 +9,6 @@ ocvu
     :alt: Documentation Status
 
 
-OpenCV Utilities
+OpenCV Utilities.
 
-Check the documentation `here <https://ocvu.readthedocs.org/>`.
+Check the documentation at <https://ocvu.readthedocs.org/>.
