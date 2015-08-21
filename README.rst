@@ -1,6 +1,6 @@
-====
+####
 ocvu
-====
+####
 
 |docs|
 
@@ -9,11 +9,11 @@ ocvu
     :alt: Documentation Status
 
 
-.. include:: ../DESCRIPTION.rst
+.. include:: DESCRIPTION.rst
 
 * Free software: MIT license
 
-.. include:: ../INSTALLATION.rst
+.. include:: INSTALLATION.rst
 
 Documentation
 =============
