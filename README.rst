@@ -9,13 +9,8 @@ ocvu
     :alt: Documentation Status
 
 
-.. include:: ./DESCRIPTION.rst
+OpenCV Utilities
 
-* Free software: MIT license
+Documentation: https://ocvu.readthedocs.org/
 
-.. include:: ./INSTALLATION.rst
-
-Documentation
-=============
-
-https://ocvu.readthedocs.org/
+License: MIT
