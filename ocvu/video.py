@@ -6,6 +6,7 @@ Video object
 
 import logging
 
+import pandas as pd
 import cv2
 
 
@@ -22,6 +23,7 @@ class Video:
         # OpenCV VideoCapture object
         self._capture = cv2.VideoCapture(filepath)
         self.grayscale = grayscale
+        self.bgmodel = None
 
     def __iter__(self):
         for i in self.frames:
@@ -83,6 +85,42 @@ class Video:
     def frames(self):
         """Returns an iterator with all frames."""
         return range(self.nframes)
+
+    def generate_background_model(self):
+        """Generate a background model for this video using a simple
+        method:
+
+        - Frame blurring
+        - Dynamic learning rate
+        - Assumes the background is brighter than the moving objects.
+        """
+        lr = 2
+        df = pd.DataFrame(columns=["bgmodel", "sum_elems"])
+
+        bgs_mog2 = cv2.createBackgroundSubtractorMOG2(detectShadows=False)
+
+        logger.info("Generating background model")
+
+        for frame in self[::self.fps]:
+            bgs_mog2.apply(cv2.blur(frame.image, (2, 2)), learningRate=lr)
+            bgmodel = bgs_mog2.getBackgroundImage()
+
+            if lr < 0.5:
+                df = df.append(
+                    {
+                        "bgmodel": bgmodel,
+                        "sum_elems": cv2.sumElems(bgmodel)[0]
+                    },
+                    ignore_index=True
+                )
+
+            if lr < 0.001:
+                bgmodel = df.loc[df.sum_elems.idxmax(), "bgmodel"]
+                logger.info("Background model was generated successfully!")
+                self.bgmodel = bgmodel
+                return bgmodel
+            else:
+                lr = (0.9 * lr)
 
     def read_frame(self, number=None, grayscale=False):
         """Reads the current frame and returns it.
