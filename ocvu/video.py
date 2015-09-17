@@ -94,6 +94,12 @@ class Video:
         - Dynamic learning rate
         - Assumes the background is brighter than the moving objects.
         """
+
+        video_being_read_in_grayscale = self.grayscale
+
+        if not video_being_read_in_grayscale:
+            self.grayscale = True
+
         lr = 2
         df = pd.DataFrame(columns=["bgmodel", "sum_elems"])
 
@@ -117,10 +123,15 @@ class Video:
             if lr < 0.001:
                 bgmodel = df.loc[df.sum_elems.idxmax(), "bgmodel"]
                 logger.info("Background model was generated successfully!")
-                self.bgmodel = bgmodel
-                return bgmodel
+                break
             else:
                 lr = (0.9 * lr)
+
+        if not video_being_read_in_grayscale:
+            self.grayscale = False
+
+        self.bgmodel = bgmodel
+        return bgmodel
 
     def read_frame(self, number=None, grayscale=False):
         """Reads the current frame and returns it.
