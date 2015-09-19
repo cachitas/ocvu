@@ -1,5 +1,10 @@
+import logging
+
 import numpy as np
 import cv2
+
+
+logger = logging.getLogger(__name__)
 
 
 class Contour(object):
@@ -125,19 +130,22 @@ class Contour(object):
         cv2.circle(image, center, radius, color, thickness, **kwargs)
 
 
-def find_biggest_contours(image, n=1, area_min=None, **kwargs):
-    """Returns the `n` biggest contours in `image`.
+def find_biggest_contours(mask, n=1, area_min=None, **kwargs):
+    """Returns the `n` biggest contours in `mask`.
     Returns a list of contours sorted by area in descending order.
     If you provide a minimal area value, contours returned will be
     filtered like so.
     """
     mode = kwargs.pop('mode', cv2.RETR_EXTERNAL)
     method = kwargs.pop('method', cv2.CHAIN_APPROX_SIMPLE)
-    _, contours, _ = cv2.findContours(image, mode, method, **kwargs)
-    contours = map(Contour, contours)
+    _, contours, _ = cv2.findContours(mask, mode, method, **kwargs)
+    contours_found = list(map(Contour, contours))
     if area_min is not None:
-        contours = [cnt for cnt in contours if cnt.area > area_min]
+        contours = [cnt for cnt in contours_found if cnt.area > area_min]
     else:
-        contours = list(contours)
+        contours = list(contours_found)
     contours.sort(key=lambda cnt: cnt.area, reverse=True)
-    return contours[:n]
+    contours = contours[:n]
+    logger.debug("Retrieved {} contours from {} found".format(
+        len(contours), len(contours_found)))
+    return contours
