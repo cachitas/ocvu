@@ -281,8 +281,16 @@ class Video:
 class Frame:
 
     def __init__(self, number, image=None):
-        self.number = number
-        self.image = image
+        self._number = number
+        self._image = image
 
     def __repr__(self):
         return('Frame({})'.format(self.number))
+
+    @property
+    def number(self):
+        return self._number
+
+    @property
+    def image(self):
+        return self._image
