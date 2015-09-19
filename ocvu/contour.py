@@ -140,4 +140,4 @@ def find_biggest_contours(image, n=1, area_min=None, **kwargs):
     else:
         contours = list(contours)
     contours.sort(key=lambda cnt: cnt.area, reverse=True)
-    return contours
+    return contours[:n]
