@@ -45,7 +45,7 @@ class Video:
             s=self.size,
             n=self.nframes,
             fps=self.fps
-            )
+        )
 
     def __del__(self):
         self._capture.release()
