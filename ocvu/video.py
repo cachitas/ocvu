@@ -94,6 +94,7 @@ class Video:
         - Dynamic learning rate
         - Assumes the background is brighter than the moving objects.
         """
+        # FIXME remove this (needs pandas and there is a better implementation)
 
         video_being_read_in_grayscale = self.grayscale
 
