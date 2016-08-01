@@ -95,10 +95,10 @@ class Video:
         mean squared error method.
 
         Parameters:
-            step: Step to iterate through the video. Default is video FPS rate
-            end: Last frame to consider
+            step: Step to iterate through the video. Default is video FPS rate.
+            end: Last frame to consider.
             mse_min: The minimum error at wich the frame is selected. The
-            lower the error, the more *similar* the two images are.
+                lower the error, the more *similar* the two images are.
         """
 
         step = step or self.fps
