@@ -1,6 +1,19 @@
 # -*- coding: utf-8 -*-
 
+import numpy as np
 import cv2
+
+
+def _mean_squared_error(img1, img2):
+    """
+    The **Mean Squared Error** between the two images is the sum of the
+    squared difference between the two images. The lower the error, the
+    more *similar* the two images are.
+    **NOTE:** the two images must have the same dimension.
+    """
+    err = np.sum((img1.astype("float") - img2.astype("float")) ** 2)
+    err /= float(img1.shape[0] * img1.shape[1])
+    return err
 
 
 def imshow(window_name, image, border_color=(0, 0, 0)):

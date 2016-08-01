@@ -6,8 +6,10 @@ Video object
 
 import logging
 
-import pandas as pd
+import numpy as np
 import cv2
+
+from .utils import _mean_squared_error
 
 
 logger = logging.getLogger(__name__)
@@ -86,52 +88,47 @@ class Video:
         """Returns an iterator with all frames."""
         return range(self.nframes)
 
-    def generate_background_model(self):
-        """Generate a background model for this video using a simple
-        method:
+    def generate_background_model(self, step=None, end=None, mse_min=50):
+        """Generates a background model using the median.
 
-        - Frame blurring
-        - Dynamic learning rate
-        - Assumes the background is brighter than the moving objects.
+        Only sufficiently different frames are considered, using the
+        mean squared error method.
+
+        Parameters:
+            step: Step to iterate through the video. Default is video FPS rate
+            end: Last frame to consider
+            mse_min: The minimum error at wich the frame is selected. The
+            lower the error, the more *similar* the two images are.
         """
-        # FIXME remove this (needs pandas and there is a better implementation)
 
-        video_being_read_in_grayscale = self.grayscale
+        step = step or self.fps
+        end = end or int(self.nframes * (2 / 3))
 
-        if not video_being_read_in_grayscale:
-            self.grayscale = True
+        # Select the good frames to compute the background model
+        logger.info(
+            "Selecting frames (step={}, end={}, mse_min={})".format(
+                step, end, mse_min)
+        )
 
-        lr = 2
-        df = pd.DataFrame(columns=["bgmodel", "sum_elems"])
+        first_frame = self.read_frame(number=0, grayscale=True)
+        selected_frames = [first_frame.image]
 
-        bgs_mog2 = cv2.createBackgroundSubtractorMOG2(detectShadows=False)
-
-        logger.info("Generating background model")
-
-        for frame in self[::self.fps]:
-            bgs_mog2.apply(cv2.blur(frame.image, (2, 2)), learningRate=lr)
-            bgmodel = bgs_mog2.getBackgroundImage()
-
-            if lr < 0.5:
-                df = df.append(
-                    {
-                        "bgmodel": bgmodel,
-                        "sum_elems": cv2.sumElems(bgmodel)[0]
-                    },
-                    ignore_index=True
-                )
-
-            if lr < 0.001:
-                bgmodel = df.loc[df.sum_elems.idxmax(), "bgmodel"]
-                logger.info("Background model was generated successfully!")
-                break
+        for i in range(1, end, step):
+            frame = self.read_frame(number=i, grayscale=True)
+            mse = _mean_squared_error(frame.image, selected_frames[-1])
+            if mse < mse_min:
+                continue
             else:
-                lr = (0.9 * lr)
+                selected_frames.append(frame.image)
 
-        if not video_being_read_in_grayscale:
-            self.grayscale = False
+        logger.info(
+            "Generating the background model using {} frames".format(
+                len(selected_frames))
+        )
 
-        self.bgmodel = bgmodel
+        bgmodel = np.median(
+            np.dstack(selected_frames), axis=2).astype(np.uint8)
+
         return bgmodel
 
     def read_frame(self, number=None, grayscale=False):
