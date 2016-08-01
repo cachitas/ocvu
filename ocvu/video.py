@@ -96,7 +96,7 @@ class Video:
 
         Parameters:
             step: Step to iterate through the video. Default is video FPS rate.
-            end: Last frame to consider.
+            end: Last frame to consider. Default is 2/3 of video length.
             mse_min: The minimum error at wich the frame is selected. The
                 lower the error, the more *similar* the two images are.
         """
