@@ -23,6 +23,7 @@ class Video:
 
     def __init__(self, filepath, grayscale=False):
         # OpenCV VideoCapture object
+        self.filepath = filepath
         self._capture = cv2.VideoCapture(filepath)
         self.grayscale = grayscale
         self.bgmodel = None
