@@ -59,6 +59,12 @@ class Video:
             yield self.read_frame(number=i)
 
     @property
+    def fourcc(self):
+        """4-character code of codec."""
+        fourcc = int(self._capture.get(cv2.CAP_PROP_FOURCC))
+        return "".join([chr((fourcc >> 8 * i) & 0xFF) for i in range(4)])
+
+    @property
     def nframes(self):
         """Returns the total number of frames."""
         return int(self._capture.get(cv2.CAP_PROP_FRAME_COUNT))
